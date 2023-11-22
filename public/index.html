@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelly Criterion Calculator</title>
+</head>
+<body>
+    <h1>Kelly Criterion Bet Sizing Calculator</h1>
+    <form id="betForm">
+        <label for="probability">Probability of Winning (p):</label><br>
+        <input type="number" id="probability" name="probability" min="0" max="1" step="any" required><br>
+        
+        <label for="odds">American Odds:</label><br>
+        <input type="number" id="odds" name="odds" required><br><br>
+        
+        <label for="bankroll">Bankroll (k):</label><br>
+        <input type="number" id="bankroll" name="bankroll" min="0" step="any" required><br><br>
+        
+        <button type="submit">Calculate</button>
+    </form>
+    <p id="result"></p>
+
+    <script>
+        document.getElementById('betForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+    
+            const p = parseFloat(document.getElementById('probability').value);
+            const k = parseFloat(document.getElementById('bankroll').value);
+            const odds = parseInt(document.getElementById('odds').value);
+    
+            // Check for invalid odds
+            if (odds >= -100 && odds <= 99) {
+                document.getElementById('result').innerText = 'Error: Invalid American odds. Please enter odds outside the range of -100 to 99.';
+                return;
+            }
+    
+            fetch('/calculate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ p, k, odds }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Round the output to 2 decimal places
+                const roundedOptimalBet = parseFloat(data.optimalBet).toFixed(2);
+                document.getElementById('result').innerText = 'Optimal Bet: ' + roundedOptimalBet;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('result').innerText = 'An error occurred. Please try again.';
+            });
+        });
+    </script>    
+</body>
+</html>
