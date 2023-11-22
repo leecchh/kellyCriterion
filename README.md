@@ -25,8 +25,8 @@ To set up this application:
 
 1. Clone the repository to your local machine.
 2. Navigate to the project directory and install dependencies (if any).
-3. Run the server (typically via `node server.js` or similar command).
-4. Open the `index.html` file in a web browser to use the calculator.
+3. Run the server (typically via `node server.js`).
+4. Open the `index.html` file in a web browser to use the calculator (`http://localhost:3000/`)
 
 ## Contributing
 
